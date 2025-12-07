@@ -89,7 +89,7 @@ environment.etc."zsh/p10k".source =
   # Users
   users.users.nora = {
     isNormalUser = true;
-    description = "ellen";
+    description = "nora";
     shell = pkgs.zsh;
     extraGroups = [ "networkmanager" "wheel" "power" ];
     packages = with pkgs; [
@@ -119,6 +119,13 @@ environment.etc."zsh/p10k".source =
     
     # Hyprland and customization :p
     hyprshot
+    hyprlock
+    waybar
+    rofi
+    pywal
+    kitty
+    nemo
+    micro
     cava
     cmatrix
     tty-clock
