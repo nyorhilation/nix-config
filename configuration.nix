@@ -129,6 +129,7 @@ environment.etc."zsh/p10k".source =
     cava
     cmatrix
     tty-clock
+    mako
 
     # Random things
     psmisc
