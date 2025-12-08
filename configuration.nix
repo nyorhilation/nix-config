@@ -59,26 +59,27 @@
   # Shells
   programs.zsh = {
     enable = true;
-  
+
     enableCompletion = true;
     syntaxHighlighting.enable = true;
     autosuggestions.enable = true;
   
     ohMyZsh = {
       enable = true;
-      theme = "powerlevel10k/powerlevel10k";
       plugins = [ "git" "z" "colored-man-pages" ];
-    };
+    };      
   };
 
-environment.shellInit = ''
-  [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
-'';
-
-environment.etc."zsh/p10k".source =
+environment.etc."zsh/p10k.zsh".source =
   "${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
 
+environment.shellInit = ''
+  # Load Powerlevel10k theme
+  source /etc/zsh/p10k.zsh
 
+  # Load Powerlevel10k personal config if it exists
+  [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+'';
 
   # Flatpak
   services.flatpak.enable = true;
@@ -119,7 +120,7 @@ environment.etc."zsh/p10k".source =
   # General applications
   environment.systemPackages = with pkgs; [
     kitty
-    discord
+    vesktop
     spotify
     pywalfox-native
     nwg-look
@@ -142,6 +143,12 @@ environment.etc."zsh/p10k".source =
     cmatrix
     tty-clock
     mako
+    fastfetch
+    git
+    gh
+    unzip
+    swww
+    wl-clipboard
 
     # Random things
     psmisc
