@@ -5,6 +5,10 @@
     ./hardware-configuration.nix
   ];
 
+
+  # activate flakes
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  
   # Bootloader
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -70,16 +74,17 @@
     };      
   };
 
-environment.etc."zsh/p10k.zsh".source =
-  "${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
-
-environment.shellInit = ''
-  # Load Powerlevel10k theme
-  source /etc/zsh/p10k.zsh
-
-  # Load Powerlevel10k personal config if it exists
-  [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
-'';
+	#powerlevel10k prompt
+	environment.etc."zsh/p10k.zsh".source =
+	  "${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
+	  
+	environment.shellInit = ''
+   	  # Load Powerlevel10k theme
+  	  source /etc/zsh/p10k.zsh
+  	  
+	  # Load Powerlevel10k personal config if it exists
+	  [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+	'';
 
   # Flatpak
   services.flatpak.enable = true;
@@ -99,6 +104,11 @@ environment.shellInit = ''
     dedicatedServer.openFirewall = true;
   };
 
+  # opengl drivers
+  hardware.opengl = {
+    enable = true;
+  };
+      
   # Users
   users.users.nora = {
     isNormalUser = true;
@@ -113,15 +123,24 @@ environment.shellInit = ''
   # Firefox
   programs.firefox.enable = true;
 
+  #thunar
+  programs.thunar.enable = true;
+
   # Allow unfree packages (Steam, Spotify, etc.)
   nixpkgs.config.allowUnfree = true;
 
   # System Packages
   # General applications
   environment.systemPackages = with pkgs; [
+
+    # spotify and spicetify
+	spotify    
+
+    # terminal
     kitty
+
+    # apps
     vesktop
-    spotify
     pywalfox-native
     nwg-look
     vscode
@@ -136,8 +155,6 @@ environment.shellInit = ''
     waybar
     rofi
     pywal
-    kitty
-    nemo
     micro
     cava
     cmatrix
@@ -165,6 +182,15 @@ environment.shellInit = ''
     nerd-fonts.iosevka
     nerd-fonts.victor-mono
     source-code-pro
+
+    #themes
+    materia-theme
+    bibata-cursors
+    gruvbox-dark-gtk
+    gruvbox-plus-icons
+    gruvbox-dark-icons-gtk
+    gruvbox-material-gtk-theme
+    numix-solarized-gtk-theme
 
     # Amd tools and drivers
     radeontop
