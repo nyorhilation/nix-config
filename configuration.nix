@@ -5,6 +5,18 @@
     ./hardware-configuration.nix
   ];
 
+  # exports
+   environment.sessionVariables = {
+    NIXOS_OZONE_WL = "1";
+    XDG_SESSION_TYPE = "wayland";
+    XDG_SESSION_DESKTOP = "hyprland";
+    XDG_CURRENT_DESKTOP = "Hyprland";
+    QT_QPA_PLATFORM = "wayland";
+    ELECTRON_OZONE_PLATFORM_HINT = "wayland";
+    ELECTRON_ENABLE_WAYLAND = "1";
+    MOZ_ENABLE_WAYLAND = "1";
+    SDL_VIDEODRIVER = "wayland";
+    };
 
   # activate flakes
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -14,7 +26,7 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   # Hostname & networking
-  networking.hostName = "kamishiro";
+  networking.hostName = "tichelmorres";
   networking.networkmanager.enable = true;
 
   # Time
@@ -35,7 +47,7 @@
     LC_TIME = "pt_BR.UTF-8";
   };
 
-  # Plasma + X11
+  # sddm
   services.xserver.enable = true;
   services.displayManager.sddm.enable = true;
   services.desktopManager.plasma6.enable = true;
@@ -44,7 +56,8 @@
     layout = "br";
     variant = "";
   };
-
+  
+  # keyboard 
   console.keyMap = "br-abnt2";
 
   # Printing
@@ -105,9 +118,7 @@
   };
 
   # opengl drivers
-  hardware.opengl = {
-    enable = true;
-  };
+  hardware.graphics.enable = true;
       
   # Users
   users.users.nora = {
@@ -123,7 +134,7 @@
   # Firefox
   programs.firefox.enable = true;
 
-  #thunar
+  # thunar
   programs.thunar.enable = true;
 
   # Allow unfree packages (Steam, Spotify, etc.)
@@ -136,45 +147,50 @@
     # spotify and spicetify
 	spotify    
 
-    # terminal
+    # terminal and utilities
     kitty
+    unzip
+    wl-clipboard
+    git
+    gh
+    btop
+    micro
+    vim
+    imagemagick
 
     # apps
     vesktop
-    pywalfox-native
     nwg-look
     vscode
     krita
     nwg-displays
     google-chrome
     obs-studio
+    mangohud
     
-    # Hyprland and customization :p
+    # hyprland and customization :p
     hyprshot
     hyprlock
     waybar
     rofi
     pywal
-    micro
     cava
-    cmatrix
     tty-clock
     mako
     fastfetch
-    git
-    gh
-    unzip
     swww
-    wl-clipboard
 
-    # Random things
+    # random things
     psmisc
     libnotify
     playerctl
     protonup-qt
     zsh-powerlevel10k
+    pavucontrol
+    pulseaudio
+    blueman
 
-    # Fonts
+    # fonts
     nerd-fonts.jetbrains-mono
     nerd-fonts.fira-code
     nerd-fonts.fira-mono
@@ -183,7 +199,7 @@
     nerd-fonts.victor-mono
     source-code-pro
 
-    #themes
+    # themes
     materia-theme
     bibata-cursors
     gruvbox-dark-gtk
@@ -192,12 +208,15 @@
     gruvbox-material-gtk-theme
     numix-solarized-gtk-theme
 
-    # Amd tools and drivers
+    #mmd tools and drivers
     radeontop
   ];
 
   # Optional Hyprland session
-  programs.hyprland.enable = true;
+  programs.hyprland = {
+  enable = true;
+  xwayland.enable = true;
+  };
 
   # System version — do NOT change unless installing a fresh system
   system.stateVersion = "23.11";
