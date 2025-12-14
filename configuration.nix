@@ -5,7 +5,7 @@
     ./hardware-configuration.nix
   ];
 
-  # setting wayland environment
+  # exports
    environment.sessionVariables = {
     NIXOS_OZONE_WL = "1";
     XDG_SESSION_TYPE = "wayland";
@@ -179,6 +179,7 @@
     mako
     fastfetch
     swww
+    pipes
 
     # random things
     psmisc
