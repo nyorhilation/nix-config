@@ -33,8 +33,11 @@
   time.timeZone = "America/Fortaleza";
 
   # Locale
-  i18n.defaultLocale = "en_US.UTF-8";
-
+  i18n = {
+  defaultLocale = "en_US.UTF-8";
+  extraLocales = [ "fr_FR.UTF-8/UTF-8" ];
+  };
+  
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "pt_BR.UTF-8";
     LC_IDENTIFICATION = "pt_BR.UTF-8";
@@ -49,13 +52,34 @@
 
   # sddm
   services.xserver.enable = true;
-  services.displayManager.sddm.enable = true;
+  services.displayManager.sddm.enable = false;
   services.desktopManager.plasma6.enable = true;
 
   services.xserver.xkb = {
     layout = "br";
     variant = "";
   };
+
+  systemd.defaultUnit = "graphical.target";
+
+  systemd.services."getty@tty1".enable = false;
+
+  security.pam.services.greetd = {};
+
+  services.seatd.enable = true;
+  
+  services.greetd = {
+    enable = true;
+    settings = {
+      default_session = {
+        user = "greeter";
+        command = "${pkgs.tuigreet}/bin/tuigreet";
+      };
+    };
+  };
+
+  # security polkit
+  security.polkit.enable = true;
   
   # keyboard 
   console.keyMap = "br-abnt2";
@@ -86,19 +110,19 @@
       plugins = [ "git" "z" "colored-man-pages" ];
     };      
   };
-
-	#powerlevel10k prompt
-	environment.etc."zsh/p10k.zsh".source =
-	  "${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
-	  
-	environment.shellInit = ''
-   	  # Load Powerlevel10k theme
-  	  source /etc/zsh/p10k.zsh
-  	  
-	  # Load Powerlevel10k personal config if it exists
-	  [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
-	'';
-
+  
+    # p10k
+    environment.etc."zsh/p10k.zsh".source =
+      "${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
+      
+    environment.shellInit = ''
+      # Load Powerlevel10k ONLY if running in Kitty terminal
+      if [[ "$TERM" == *"kitty"* ]] || [[ -n "$KITTY_WINDOW_ID" ]]; then
+        source /etc/zsh/p10k.zsh
+        [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+      fi
+      # No else needed - if not Kitty, p10k won't load at all
+    '';
   # Flatpak
   services.flatpak.enable = true;
     systemd.services.flatpak-repo = {
@@ -125,7 +149,7 @@
     isNormalUser = true;
     description = "nora";
     shell = pkgs.zsh;
-    extraGroups = [ "networkmanager" "wheel" "power" ];
+    extraGroups = [ "networkmanager" "wheel" "power" "video" "audio" ];
     packages = with pkgs; [
       kdePackages.kate
     ];
@@ -180,6 +204,7 @@
     fastfetch
     swww
     pipes
+    tuigreet
 
     # random things
     psmisc
