@@ -50,24 +50,18 @@
     LC_TIME = "pt_BR.UTF-8";
   };
 
-  # sddm
+  # xserver
   services.xserver.enable = true;
-  services.displayManager.sddm.enable = false;
-  services.desktopManager.plasma6.enable = true;
-
   services.xserver.xkb = {
     layout = "br";
     variant = "";
   };
 
+  # greetd + tui
   systemd.defaultUnit = "graphical.target";
-
   systemd.services."getty@tty1".enable = false;
-
   security.pam.services.greetd = {};
-
   services.seatd.enable = true;
-  
   services.greetd = {
     enable = true;
     settings = {
@@ -83,6 +77,12 @@
   
   # keyboard 
   console.keyMap = "br-abnt2";
+
+  # default apps
+  environment.variables = {
+    EDITOR = "micro";
+    VISUAL = "micro";
+  };
 
   # Printing
   services.printing.enable = true;
@@ -133,13 +133,28 @@
       '';
     };
 
-
   # Steam
   programs.steam = {
     enable = true;
     remotePlay.openFirewall = true;
     dedicatedServer.openFirewall = true;
   };
+
+  # gamemode
+  programs.gamemode = {
+      enable = true;
+      enableRenice = true;
+      settings = {
+        general = {
+          softrealtime = "auto";
+          renice = 10;
+        };
+        custom = {
+          start = "notify-send -a 'Gamemode' 'Optimizations activated'";
+          end = "notify-send -a 'Gamemode' 'Optimizations deactivated'";
+        };
+      };
+    };
 
   # opengl drivers
   hardware.graphics.enable = true;
@@ -150,9 +165,6 @@
     description = "nora";
     shell = pkgs.zsh;
     extraGroups = [ "networkmanager" "wheel" "power" "video" "audio" ];
-    packages = with pkgs; [
-      kdePackages.kate
-    ];
   };
 
   # Firefox
@@ -195,7 +207,7 @@
     # hyprland and customization :p
     hyprshot
     hyprlock
-    waybar
+    wofi
     rofi
     pywal
     cava
@@ -205,6 +217,7 @@
     swww
     pipes
     tuigreet
+    waybar
 
     # random things
     psmisc
@@ -214,16 +227,6 @@
     zsh-powerlevel10k
     pavucontrol
     pulseaudio
-    blueman
-
-    # fonts
-    nerd-fonts.jetbrains-mono
-    nerd-fonts.fira-code
-    nerd-fonts.fira-mono
-    nerd-fonts.hack
-    nerd-fonts.iosevka
-    nerd-fonts.victor-mono
-    source-code-pro
 
     # themes
     materia-theme
@@ -237,6 +240,27 @@
     #mmd tools and drivers
     radeontop
   ];
+
+  # fontsa
+  fonts.fonts = with pkgs; [
+  plemoljp-nf
+
+  nerd-fonts.comic-shanns-mono
+  nerd-fonts.jetbrains-mono
+  nerd-fonts.fira-code
+  nerd-fonts.fira-mono
+  fira-code
+  nerd-fonts.hack
+  nerd-fonts.iosevka
+  nerd-fonts.victor-mono
+  source-code-pro
+  noto-fonts-cjk-sans
+  noto-fonts-color-emoji
+  rubik
+  inter
+  font-awesome
+  corefonts
+];
 
   # Optional Hyprland session
   programs.hyprland = {
